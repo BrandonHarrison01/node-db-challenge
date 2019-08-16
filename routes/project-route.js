@@ -11,13 +11,16 @@ router.get('/', (req, res) => {
     project
         .getProjects()
         .then(result => {
-            if (result.complete) {
-                result.complete = true
+                result.forEach(result => {
+                    if (result.complete) {
+                        result.complete = true
+                        // res.status(200).json(result)
+                    } else {
+                        result.complete = false
+                        // res.status(200).json(result)
+                    }
+                })
                 res.status(200).json(result)
-            } else {
-                console.log(false)
-                res.status(200).json(result)
-            }
         })
         // .then(result => res.status(200).json(result))
         .catch(error => res.status(500).json({ eror: 'there was an error' }))
@@ -70,7 +73,16 @@ router.get('/:id/tasks', (req, res) => {
 
     project
         .getTasks(id)
-        .then(tasks => res.status(200).json(tasks))
+        .then(result => {
+            result.forEach(result => {
+                if (result.complete) {
+                    result.complete = true
+                } else {
+                    result.complete = false
+                }
+            })
+            res.status(200).json(result)
+        })
         .catch(error => res.status(500).json({ error: 'there was an error' }))
 })
 
