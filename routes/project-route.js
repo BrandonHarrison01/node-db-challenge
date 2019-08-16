@@ -10,14 +10,31 @@ const router = express.Router()
 router.get('/', (req, res) => { 
     project
         .getProjects()
-        .then(result => res.status(200).json(result))
+        .then(result => {
+            if (result.complete) {
+                result.complete = true
+                res.status(200).json(result)
+            } else {
+                console.log(false)
+                res.status(200).json(result)
+            }
+        })
+        // .then(result => res.status(200).json(result))
         .catch(error => res.status(500).json({ eror: 'there was an error' }))
 })
 
 
 // POST project
 
-//
+router.post('/', (req, res) => {
+    const changes = req.body
+    console.log(req.body)
+
+    project
+        .addProject(changes)
+        .then(result => res.status(201).json(result))
+        .catch(error => res.status(500).json({ eror: 'there was an error' }))
+})
 
 
 // GET resources
@@ -34,7 +51,16 @@ router.get('/:id/resources', (req, res) => {
 
 // POST resources
 
-//
+router.post('/resources', (req, res) => {
+    const changes = req.body
+    console.log(req.body)
+
+    project
+        .addResource(changes)
+        .then(result => res.status(201).json(result))
+        .catch(error => res.status(500).json({ eror: 'there was an error' }))
+})
+
 
 
 // GET tasks
@@ -51,6 +77,14 @@ router.get('/:id/tasks', (req, res) => {
 
 // POST tasks
 
-//
+router.post('/tasks', (req, res) => {
+    const changes = req.body
+    console.log(req.body)
+
+    project
+        .addTask(changes)
+        .then(result => res.status(201).json(result))
+        .catch(error => res.status(500).json({ eror: 'there was an error' }))
+})
 
 module.exports = router
